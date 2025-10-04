@@ -7,5 +7,10 @@ import { Component, signal } from '@angular/core';
   styleUrl: './app.css'
 })
 export class App {
+  selectedFeature: string = 'documents';
+  switchView(selectedFeature: string) {
+    console.log(selectedFeature);
+    this.selectedFeature = selectedFeature;
+  }
   protected readonly title = signal('cms');
 }
