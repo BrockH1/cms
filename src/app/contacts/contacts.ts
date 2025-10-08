@@ -8,5 +8,4 @@ import { Contact } from './contact.model';
 })
 export class Contacts {
   selectedContact: Contact;
-
 }
