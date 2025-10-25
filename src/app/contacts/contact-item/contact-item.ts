@@ -9,4 +9,5 @@ import { Contact } from '../contact.model';
 
 export class ContactItem {
   @Input() contact: Contact;
+  @Input() id: number;
 }

@@ -8,4 +8,5 @@ import { Document } from '../document.model';
 })
 export class DocumentItem {
   @Input() document: Document;
+  @Input() id: number;
 }

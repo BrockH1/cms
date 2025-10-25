@@ -6,9 +6,9 @@
     </div>
     <div class="panel-body">
       <cms-contact-item
-      *ngFor="let contactEl of contacts"
+      *ngFor="let contactEl of contacts; let i = id"
       [contact]="contactEl"
-      (click)="onSelectedContact(contactEl)"></cms-contact-item>
+      [id]="i"></cms-contact-item>
     </div>
   </div>
   <hr />

@@ -10,10 +10,10 @@ import { DocumentService } from '../document.service';
 export class DocumentList {
 
 
-  onSelectedDocument(document: Document) {
-    console.log("testing");
-    this.documentService.documentSelectedEvent.emit(document);
-  }
+  // onSelectedDocument(document: Document) {
+  //   console.log("testing");
+  //   this.documentService.documentSelectedEvent.emit(document);
+  // }
 
   documents : Document[] = []
 
@@ -23,5 +23,8 @@ export class DocumentList {
 
   ngOnInit(){
     this.documents = this.documentService.getDocuments();
+    this.documentService.documentChangedEvent.subscribe((documents: Document[])=>{
+      this.documents = documents;
+    })
   }
 }
