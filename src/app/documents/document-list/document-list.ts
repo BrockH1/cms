@@ -1,6 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { Document } from '../document.model';
 import { DocumentService } from '../document.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'cms-document-list',
   standalone: false,
@@ -9,6 +10,7 @@ import { DocumentService } from '../document.service';
 })
 export class DocumentList {
 
+  subsctiption: Subscription;
 
   // onSelectedDocument(document: Document) {
   //   console.log("testing");
@@ -26,5 +28,14 @@ export class DocumentList {
     this.documentService.documentChangedEvent.subscribe((documents: Document[])=>{
       this.documents = documents;
     })
+    this.subsctiption = this.documentService.documentListChangedEvent.subscribe(
+      (documentsList: Document[]) => {
+        this.documents = documentsList;
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    this.subsctiption.unsubscribe();
   }
 }
