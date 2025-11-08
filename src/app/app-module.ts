@@ -19,6 +19,7 @@ import { DropdownDirective } from './dropdown';
 import { AppRoutingModule } from './app-routing';
 import { DocumentEdit } from './documents/document-edit/document-edit';
 import { ContactEdit } from './contacts/contact-edit/contact-edit';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     App,
@@ -41,7 +42,9 @@ import { ContactEdit } from './contacts/contact-edit/contact-edit';
   imports: [
     BrowserModule,
     DropdownDirective,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners()
