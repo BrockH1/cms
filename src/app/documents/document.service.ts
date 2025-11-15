@@ -2,6 +2,8 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Document } from './document.model';
 import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 import { Subject } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs/internal/Observable';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,12 +13,32 @@ export class DocumentService {
   documentChangedEvent = new EventEmitter<Document[]>();
   maxDocumentId: number;
 
-  constructor(){
-    this.documents = MOCKDOCUMENTS
+  constructor(
+    private http: HttpClient
+  ){
+    this.documents = []
     this.maxDocumentId = this.getMaxId()
   }
 
+  storeDocuments(){
+    let documents = JSON.stringify(this.documents);
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+    this.http.put('https://fullstack-8f473-default-rtdb.firebaseio.com/documents.json',
+    documents, {headers: headers}).subscribe(()=>{
+      this.documentListChangedEvent.next(this.documents.slice());
+    });
+  }
+
   getDocuments(): Document[] {
+    this.http.get<Document[]>('https://fullstack-8f473-default-rtdb.firebaseio.com/documents.json')
+    .subscribe(
+      (documents: Document[]) => {
+        this.documents = documents;
+        this.maxDocumentId = this.getMaxId();
+        this.documents.sort((a, b) => a.name.localeCompare(b.name));
+        this.documentListChangedEvent.next(this.documents.slice());
+      }
+    );
     return this.documents.slice();
   }
 
@@ -62,7 +84,7 @@ addDocument(newDocument: Document) {
   this.maxDocumentId++;
   newDocument.id = this.maxDocumentId.toString();
   this.documents.push(newDocument);
-  this.documentListChangedEvent.next(this.documents.slice());
+  this.storeDocuments();
 }
 
 updateDocument(originalDocument: Document, newDocument: Document) {
@@ -75,7 +97,7 @@ updateDocument(originalDocument: Document, newDocument: Document) {
   }
   newDocument.id = originalDocument.id;
   this.documents[pos] = newDocument;
-  this.documentListChangedEvent.next(this.documents.slice());
+  this.storeDocuments();
 }
 
 deleteDocument(document: Document) {
@@ -87,7 +109,7 @@ deleteDocument(document: Document) {
     return;
   }
   this.documents.splice(pos, 1);
-  this.documentListChangedEvent.next(this.documents.slice());
+  this.storeDocuments();
 }
 
   documentSelectedEvent = new EventEmitter<Document>()

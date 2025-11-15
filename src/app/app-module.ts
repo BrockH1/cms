@@ -20,6 +20,8 @@ import { AppRoutingModule } from './app-routing';
 import { DocumentEdit } from './documents/document-edit/document-edit';
 import { ContactEdit } from './contacts/contact-edit/contact-edit';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ContactsFilterPipe } from './contacts-filter-pipe';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     App,
@@ -37,14 +39,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MessageEdit,
     MessageList,
     DocumentEdit,
-    ContactEdit
+    ContactEdit,
+    ContactsFilterPipe
   ],
   imports: [
     BrowserModule,
     DropdownDirective,
     AppRoutingModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners()

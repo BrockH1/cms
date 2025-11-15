@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 })
 export class ContactList{
   contacts: Contact[] = []
+  term: string = '';
 
   subscription: Subscription;
 
@@ -36,4 +37,8 @@ export class ContactList{
   constructor(
     private contactService: ContactService
   ) {}
+
+  search(value: string){
+    this.term = value;
+  }
 }
