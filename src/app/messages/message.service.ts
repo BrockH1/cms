@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { Message } from './message.model';
+import { Message } from '../../../server/models/message';
 import { MOCKMESSAGES } from './MOCKMESSAGES';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable({
@@ -31,21 +31,18 @@ export class MessageService {
 
 
   storeMessages(){
-    let messages = JSON.stringify(this.messages);
-    const headers = new HttpHeaders({'Content-Type': 'application/json'});
-    this.http.put('https://fullstack-8f473-default-rtdb.firebaseio.com/messages.json',
-    messages, {headers: headers}).subscribe(()=>{
-      this.messageChangedEvent.emit(this.messages.slice());
-    });
+    this.messages.sort((a, b) => a.id.localCompare(b.id));
+    this.messageChangedEvent.next(this.messages.slice());
   }
 
   getMessages(){
-    this.http.get<Message[]>('https://fullstack-8f473-default-rtdb.firebaseio.com/messages.json')
+    this.http.get<Message[]>('http://localhost:3000/messages')
     .subscribe(
       (messages: Message[]) => {
+        console.log(messages);
         this.messages = messages;
         this.maxMessageId = this.getMaxId();
-        this.messages.sort((a, b) => a.subject.localeCompare(b.subject));
+        // this.messages.sort((a, b) => a.subject.localCompare(b.subject));
         this.messageChangedEvent.emit(this.messages.slice());
       }
     );
@@ -61,9 +58,33 @@ export class MessageService {
     return null;
   }
 
-  addMessage(message: Message){
-    this.messages.push(message);
-    this.storeMessages();
+  // addMessage(message: Message){
+  //   this.messages.push(message);
+  //   this.storeMessages();
+  // }
+
+  addMessage(messageObject: Message) {
+    if (!messageObject) {
+      return;
+      
+    }
+
+    // make sure id of the new Document is empty
+    messageObject.id = '';
+
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+    // add to database
+    this.http.post<{ message: string, messageObject: Message }>('http://localhost:3000/messages',
+      messageObject,
+      { headers: headers })
+      .subscribe(
+        (responseData) => {
+          // add new document to documents
+          this.messages.push(responseData.messageObject);
+          this.storeMessages();
+        }
+      );
   }
 
   messageSelectedEvent = new EventEmitter<Message>()
