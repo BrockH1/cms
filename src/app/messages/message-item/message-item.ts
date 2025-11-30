@@ -14,7 +14,9 @@ export class MessageItem {
   messageSender: string;
 
   ngOnInit(){
+    console.log(this.message);
     const contact: Contact = this.contactService.getContact(this.message.sender);
+    console.log(contact);
     if (contact != null){
       this.messageSender = contact.name;
     }

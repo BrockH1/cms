@@ -41,6 +41,7 @@ export class ContactService {
 
   getContact(id: string): Contact {
     for (let contact of this.contacts) {
+      console.log(contact.id, id);
       if (contact.id === id) {
         return contact;
       }
@@ -63,6 +64,7 @@ export class ContactService {
   getMaxId(): number {
 
     let maxId = 0;
+    console.log(this.contacts);
     for (let contact of this.contacts){
       let currentId = Number(contact.id);
       if (currentId > maxId){

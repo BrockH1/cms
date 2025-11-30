@@ -31,7 +31,7 @@ export class MessageService {
 
 
   storeMessages(){
-    this.messages.sort((a, b) => a.id.localCompare(b.id));
+    this.messages.sort((a, b) => a.id.localeCompare(b.id));
     this.messageChangedEvent.next(this.messages.slice());
   }
 
@@ -39,7 +39,7 @@ export class MessageService {
     this.http.get<Message[]>('http://localhost:3000/messages')
     .subscribe(
       (messages: Message[]) => {
-        console.log(messages);
+       // console.log(messages);
         this.messages = messages;
         this.maxMessageId = this.getMaxId();
         // this.messages.sort((a, b) => a.subject.localCompare(b.subject));
@@ -64,6 +64,7 @@ export class MessageService {
   // }
 
   addMessage(messageObject: Message) {
+    console.log(messageObject);
     if (!messageObject) {
       return;
       

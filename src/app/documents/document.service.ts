@@ -21,7 +21,7 @@ export class DocumentService {
   }
 
   storeDocuments(){
-    this.documents.sort((a, b) => a.name.localCompare(b.name));
+    this.documents.sort((a, b) => a.name.localeCompare(b.name));
     this.documentListChangedEvent.next(this.documents.slice());
   }
 
